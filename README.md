@@ -1,5 +1,5 @@
 # AiAvalon
-
+```
 Ai_Avalon/
 ├── data/
 │   └── rules.txt           # 完整的阿瓦隆规则 Prompt 上下文
@@ -18,3 +18,4 @@ Ai_Avalon/
 │   └── logger.py           # 日志系统
 ├── main.py                 # 启动入口
 └── requirements.txt
+```
