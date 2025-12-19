@@ -1,0 +1,55 @@
+# 游戏全局配置
+game:
+  num_players: 5
+
+# 玩家注册表
+players:
+  - id: 0
+    name: "AI_Merlin"
+    role: "Merlin"
+    # 可以针对每个玩家指定不同的模型或 API KEY
+    model: "gpt-4-turbo"
+    components:
+      - type: "memory"
+        triggers: ["public_speech", "vote_result", "quest_result", "system_log"]
+        params: { max_items: 10 }
+      - type: "theory_of_mind"
+        triggers: ["vote_result", "quest_result"]
+      - type: "emotion"  # 新增情绪模块
+      - type: "rag"
+        params: { kb_path: "data/strategy.txt" }
+
+  - id: 1
+    name: "AI_Assassin"
+    role: "Assassin"
+    model: "gpt-4-1106-preview"
+    components:
+      - type: "memory"
+        params: { max_items: 5 }
+      - type: "theory_of_mind" # 刺客需要分析谁是梅林
+      - type: "emotion"
+
+  - id: 2
+    name: "AI_Percival"
+    role: "Percival"
+    model: "gpt-3.5-turbo" # 派西维尔用便宜点的模型
+    components:
+      - type: "memory"
+        params: { max_items: 8 }
+      - type: "emotion"
+
+  - id: 3
+    name: "AI_Morgana"
+    role: "Morgana"
+    model: "gpt-4-1106-preview"
+    components:
+      - type: "memory"
+      - type: "emotion"
+
+  - id: 4
+    name: "AI_Servant"
+    role: "Loyal Servant"
+    model: "gpt-3.5-turbo"
+    components:
+      - type: "memory"
+      - type: "emotion"

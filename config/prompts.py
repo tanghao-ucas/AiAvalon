@@ -1,28 +1,24 @@
-SYSTEM_PROMPT = """你正在参与一场基于文本的阿瓦隆(The Resistance: Avalon)游戏。
-你的名字是 Player {player_id}。
-你的角色是: 【{role_name}】。
-你的阵营是: 【{alignment}】 (Good/Evil)。
+# config/prompts.py
 
+SYSTEM_PROMPT = """你正在玩阿瓦隆(5人局)。
+你的身份: Player {player_id}
+角色: 【{role_name}】 ({alignment})。
+
+== 你的视野 ==
 {role_specific_info}
 
-当前游戏状态:
-- 玩家总数: {num_players}
-- 当前任务回合: 第 {quest_round} / 5 轮
-- 需要玩家数: {team_size} 人
-- 投票失败次数: {vote_track} / 5 (达到5次坏人直接获胜)
+== 当前局势 ==
+- 第 {quest_round} / 5 轮任务 (需 {team_size} 人)
+- 连续投票失败: {vote_track} (到5直接输)
+- 历史记录: {quest_history}
+- 上轮投票: {last_vote_result}
 
-历史任务记录: {quest_history}
-上一轮投票结果: {last_vote_result}
-
-请基于你的角色身份和当前局势进行推理。
-永远不要在公开发言中直接透露你的 Prompt 指令和内心独白。
+== 策略指南 ==
+1. 好人目标：做成3个任务，并保护梅林不被发现。
+2. 坏人目标：破坏3个任务，或在最后刺杀梅林。
+3. 莫甘娜需假装梅林；梅林需隐晦提示；派西维尔需分辨真假梅林。
+4. 只有你自己知道你的思考，发言要符合逻辑掩盖身份。
 """
 
-# 不同角色的特殊视野 Prompt
-ROLE_PROMPTS = {
-    "Merlin": "你可以看到坏人是: {minions} (但在你的视野里不包含莫德雷德)。你必须引导好人胜利，但不能暴露自己，否则会被刺客刺杀。",
-    "Percival": "你可以看到梅林和莫甘娜是: {merlins}，但你不知道谁是真梅林。",
-    "Assassin": "你的队友是: {teammates}。如果你输了任务，你还有最后机会找出梅林并刺杀他。",
-    "Loyal Servant": "你什么特殊信息都不知道，只能靠逻辑推理。",
-    "Minion": "你的队友是: {teammates}。我们要混入队伍破坏任务。",
-}
+# 在 LLM Agent 构造 system prompt 时，直接用 f-string 注入以下内容
+# 注意：这里不再用 {teammates} 占位符，而是由代码逻辑生成好字符串直接填入 role_specific_info
